@@ -1,0 +1,12 @@
+{
+  "name": "FieldSnap Advisor",
+  "description": "Smart-offline crop and soil diagnosis advisor with traffic-light fertilizer and water guidance, Bachat savings calculator, and hyper-local weather alerts.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
