@@ -3,12 +3,11 @@ import path from "path";
 import dotenv from "dotenv";
 import { GoogleGenAI } from "@google/genai";
 import { createServer as createViteServer } from "vite";
-
+import { exec } from "child_process";
 dotenv.config();
 
-
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 
 app.use(express.json({ limit: "25mb" }));
 
@@ -136,17 +135,30 @@ async function startServer() {
       server: { middlewareMode: true },
       appType: "spa",
     });
+
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
+
     app.get("*", (req, res) => {
       res.sendFile(path.join(distPath, "index.html"));
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`FieldSnap Advisor server running at http://0.0.0.0:${PORT}`);
+  const HOST = "0.0.0.0";
+  app.listen(PORT, HOST, () => {
+    const url = `http://localhost:${PORT}`;
+
+    console.log(`FieldSnap Advisor running at ${url}`);
+
+    if (process.env.NODE_ENV !== "production") {
+      try {
+        exec(`start chrome "${url}"`);
+      } catch {
+        // Ignore if unsupported
+      }
+    }
   });
 }
 
